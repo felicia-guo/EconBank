@@ -193,6 +193,7 @@ def login_page():
                 st.session_state['logged_in_user'] = username
                 st.session_state['page'] = 'dashboard'
                 st.success(f"Welcome back, {username}!")
+                st.session_state["login_clicked"] = True
             else:
                 st.error("Invalid username or password")
     else:  # Sign Up
