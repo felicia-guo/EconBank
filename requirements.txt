@@ -1,5 +1,2 @@
-﻿streamlit
-pandas
-hashlib
-json
-os
+﻿streamlit>=1.26.0
+pandas>=2.0.0
