@@ -63,6 +63,7 @@ def user_dashboard(username):
     if st.sidebar.button("Log Out", key="logout_sidebar"):
         st.session_state['logged_in_user'] = None
         st.session_state['page'] = None
+        st.rerun()
         return
 
     if st.session_state['page'] == 'make_transaction':
@@ -140,6 +141,7 @@ def admin_dashboard():
     st.sidebar.title("Admin Dashboard")
     if st.sidebar.button("Log Out", key="admin_logout_sidebar"):
         st.session_state['logged_in_user'] = None
+        st.rerun()
         return
 
     st.title("📈 Global Economic Overview")
@@ -193,7 +195,7 @@ def login_page():
                 st.session_state['logged_in_user'] = username
                 st.session_state['page'] = 'dashboard'
                 st.success(f"Welcome back, {username}!")
-                st.rerun()
+                st.rerun()  #mguo: force page reload and go straight into dashboard
             else:
                 st.error("Invalid username or password")
     else:  # Sign Up
