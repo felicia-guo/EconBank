@@ -137,6 +137,7 @@ def make_transaction_page(username):
 
     if st.button("Back to Dashboard", key="back_dashboard"):
         st.session_state['page'] = 'dashboard'
+        st.rerun()  #mguo
 
 # -------------------- ADMIN DASHBOARD --------------------
 def admin_dashboard():
