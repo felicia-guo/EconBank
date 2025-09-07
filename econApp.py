@@ -192,7 +192,7 @@ def login_page():
             if username in st.session_state['data']['users'] and st.session_state['data']['users'][username]['password'] == hash_password(password):
                 st.session_state['logged_in_user'] = username
                 st.session_state['page'] = 'dashboard'
-                st.success(f"Welcome back, {username}!")
+            #    st.success(f"Welcome back, {username}!")
                 st.session_state["login_clicked"] = True
             else:
                 st.error("Invalid username or password")
