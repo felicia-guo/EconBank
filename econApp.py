@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 # -------------------- DATA STORAGE --------------------
-DATA_FILE = os.path.expanduser("~/Documents/economics_data.json")  # writable local path
+DATA_FILE = "economics_data.json"
 
 def load_data():
     if os.path.exists(DATA_FILE):
