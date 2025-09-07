@@ -154,7 +154,7 @@ def admin_dashboard():
 
 # -------------------- LOGIN --------------------
 def login_page():
-    st.title("💰 Economics Club Bank")
+    st.title("💰 Economics Club Bank BETA")
     st.markdown("<h3 style='color:#2E8B57;'>Login or Sign Up</h3>", unsafe_allow_html=True)
 
     choice = st.radio("Select an option", ["Login", "Sign Up"], horizontal=True)
