@@ -63,6 +63,7 @@ def user_dashboard(username):
     if st.sidebar.button("Log Out", key="logout_sidebar"):
         st.session_state['logged_in_user'] = None
         st.session_state['page'] = None
+        login_page()    #mguo: go straight to login page
         return
 
     if st.session_state['page'] == 'make_transaction':
@@ -140,6 +141,8 @@ def admin_dashboard():
     st.sidebar.title("Admin Dashboard")
     if st.sidebar.button("Log Out", key="admin_logout_sidebar"):
         st.session_state['logged_in_user'] = None
+        login_page()    #mguo: go straight to login page
+        return
 
     st.title("📈 Global Economic Overview")
 
@@ -192,6 +195,13 @@ def login_page():
                 st.session_state['logged_in_user'] = username
                 st.session_state['page'] = 'dashboard'
                 st.success(f"Welcome back, {username}!")
+
+                # mguo: change double click to single click
+                role = st.session_state['data']['users'][username]['role']
+                if role == 'admin':
+                    admin_dashboard()
+                else:
+                    user_dashboard(username)
             else:
                 st.error("Invalid username or password")
     else:  # Sign Up
