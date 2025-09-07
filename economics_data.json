@@ -8,14 +8,7 @@
         "feliciag": {
             "password": "389781024b94cdd0e538dbe8b0af10b250fcde164121283e9f0b198a109624fb",
             "role": "user",
-            "logs": [
-                {
-                    "type": "Earned",
-                    "amount": 10.0,
-                    "description": "Sold a book",
-                    "timestamp": "2025-09-06 22:57:46"
-                }
-            ]
+            "logs": []
         }
     }
 }
