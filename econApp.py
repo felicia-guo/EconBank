@@ -63,7 +63,7 @@ def user_dashboard(username):
     if st.sidebar.button("Log Out", key="logout_sidebar"):
         st.session_state['logged_in_user'] = None
         st.session_state['page'] = None
-        st.rerun()
+        st.rerun()  #mguo: force to login page immediately
         return
 
     if st.session_state['page'] == 'make_transaction':
@@ -93,6 +93,7 @@ def user_dashboard(username):
 
         if st.button("Make Transaction", key="summary_make_txn"):
             st.session_state['page'] = 'make_transaction'
+            st.rerun()  #mguo
 
     # --- TRANSACTIONS TAB ---
     with tabs[1]:
@@ -106,6 +107,7 @@ def user_dashboard(username):
 
         if st.button("Make Transaction", key="transactions_make_txn"):
             st.session_state['page'] = 'make_transaction'
+            st.rerun()  #mguo
 
     # --- STATISTICS TAB ---
     with tabs[2]:
@@ -141,7 +143,7 @@ def admin_dashboard():
     st.sidebar.title("Admin Dashboard")
     if st.sidebar.button("Log Out", key="admin_logout_sidebar"):
         st.session_state['logged_in_user'] = None
-        st.rerun()
+        st.rerun()  #mguo: force to login page immediately
         return
 
     st.title("📈 Global Economic Overview")
