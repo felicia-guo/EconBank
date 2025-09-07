@@ -5,21 +5,29 @@ import json
 import os
 from datetime import datetime
 
-# -------------------- DATA STORAGE --------------------
+# -------------------- CENTRALIZED DATA FILE --------------------
+# Place this JSON in a shared folder or in the app folder on Streamlit Cloud
 DATA_FILE = "economics_data.json"
 
+# -------------------- LOAD AND SAVE FUNCTIONS --------------------
 def load_data():
-    if os.path.exists(DATA_FILE):
+    """Load the central JSON file or create default admin account."""
+    try:
         with open(DATA_FILE, "r") as f:
             return json.load(f)
-    return {"users": {"admin": {"password": hashlib.sha256("admin123".encode()).hexdigest(),
-                                "role": "admin",
-                                "logs": []}}}
+    except FileNotFoundError:
+        # Create default admin account if file does not exist
+        return {"users": {"admin": {"password": hashlib.sha256("admin123".encode()).hexdigest(),
+                                    "role": "admin",
+                                    "logs": []}}}
 
 def save_data():
+    """Save current data to JSON file."""
+    os.makedirs(os.path.dirname(DATA_FILE) or ".", exist_ok=True)
     with open(DATA_FILE, "w") as f:
         json.dump(st.session_state['data'], f, indent=4)
 
+# -------------------- SESSION STATE INIT --------------------
 if 'data' not in st.session_state:
     st.session_state['data'] = load_data()
 if 'logged_in_user' not in st.session_state:
@@ -79,8 +87,8 @@ def user_dashboard(username):
         </div>
         """, unsafe_allow_html=True)
 
-        st.write("")  # adds one empty line
-        st.write("")  # adds another empty line if you want more space
+        st.write("")
+        st.write("")
 
         if st.button("Make Transaction", key="summary_make_txn"):
             st.session_state['page'] = 'make_transaction'
@@ -134,6 +142,7 @@ def admin_dashboard():
         st.session_state['logged_in_user'] = None
 
     st.title("📈 Global Economic Overview")
+
     all_logs = []
     for user, data in st.session_state['data']['users'].items():
         for log in data['logs']:
@@ -141,20 +150,36 @@ def admin_dashboard():
 
     if all_logs:
         df = pd.DataFrame(all_logs)
-        st.dataframe(df)
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+        st.subheader("All Transactions")
+        st.dataframe(df.sort_values(by='timestamp', ascending=False))
+
         total_earned = df[df['type'] == 'Earned']['amount'].sum()
         total_spent = df[df['type'] == 'Spent']['amount'].sum()
+        total_given = df[df['type'] == 'Given']['amount'].sum()
+        total_received = df[df['type'] == 'Received']['amount'].sum()
+
+        st.subheader("Summary Metrics")
         st.metric("Total Earned", f"${total_earned:.2f}")
         st.metric("Total Spent", f"${total_spent:.2f}")
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        st.metric("Total Given", f"${total_given:.2f}")
+        st.metric("Total Received", f"${total_received:.2f}")
+
+        st.subheader("Transaction Trends Over Time")
         st.line_chart(df.groupby(df['timestamp'].dt.date)['amount'].sum())
+
+        st.subheader("Transaction Breakdown by Type")
         st.bar_chart(df.groupby("type")["amount"].sum())
+
+        st.subheader("Transactions per User")
+        st.bar_chart(df.groupby("User")["amount"].sum())
     else:
         st.info("No transactions recorded yet.")
 
-# -------------------- LOGIN --------------------
+# -------------------- LOGIN PAGE --------------------
 def login_page():
-    st.title("💰 Economics Club Bank BETA")
+    st.title("💰 Economics Club Bank")
     st.markdown("<h3 style='color:#2E8B57;'>Login or Sign Up</h3>", unsafe_allow_html=True)
 
     choice = st.radio("Select an option", ["Login", "Sign Up"], horizontal=True)
