@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 # -------------------- CENTRALIZED DATA FILE --------------------
 # Place this JSON in a shared folder or in the app folder on Streamlit Cloud
@@ -44,7 +45,7 @@ def log_transaction(user, t_type, amount, description):
         "type": t_type,
         "amount": float(amount),
         "description": description,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        "timestamp": datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y-%m-%d %H:%M:%S")
     }
     st.session_state['data']['users'][user]["logs"].append(entry)
     save_data()
